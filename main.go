@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"log/slog"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 var (
@@ -11,15 +14,19 @@ var (
 )
 
 func main() {
-	ctx, cancel := context.WithCancel(context.Background())
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
 
-	slog.Info("auth service started with version: %s, commit: %s", Version, Commit)
+	sig, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 
-	select {
-	case <-ctx.Done():
-		break
-	}
+	slog.Info("auth starting", slog.String("version", Version), slog.String("commit", Commit))
 
-	cancel()
-	slog.Info("auth shutting down...")
+	go func() {
+		<-sig.Done()
+		stop()
+	}()
+
+	<-sig.Done()
+	slog.Info("auth stopping")
 }
