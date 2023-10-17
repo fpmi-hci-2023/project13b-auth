@@ -32,25 +32,7 @@ replicaCount: 1
 podAnnotations: {}
 
 probes:
-    enabled: true
-    liveness:
-        initialDelaySeconds: 5
-        periodSeconds: 10
-        timeoutSeconds: 5
-        failureThreshold: 3
-        successThreshold: 1
-        httpGet:
-            path: /
-            port: http
-    readiness:
-        initialDelaySeconds: 5
-        periodSeconds: 10
-        timeoutSeconds: 5
-        failureThreshold: 3
-        successThreshold: 1
-        httpGet:
-          path: /
-          port: http
+    enabled: false
 
 resources:
   limits:
