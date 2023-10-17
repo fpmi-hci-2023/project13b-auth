@@ -1,0 +1,71 @@
+app:
+    name: auth
+    namespace: hci
+
+image:
+  repository: ghcr.io/fpmi-hci-2023/auth:latest
+  tag: latest
+  pullPolicy: Always
+  pullSecretName: github-container-registry
+  dockerconfigjson: |
+    ewogICJhdXRocyI6CiAgICB7CiAgICAgICJnaGNyLmlvIjoKICAgICAgICB7CiAgICAgICAgICAiYXV0aCI6ImNtbGphR0Z5WkMxdmJqcG5hSEJmTVdoaFNGTm1UamMxTVZKVFoxVm9jR053YlRrek1GSTVZa1ZFTUhkQk0yWXdORXB6IgogICAgICAgIH0KICAgIH0KfQ==
+
+ports:
+  - name: http
+    protocol: TCP
+    containerPort: 8080
+
+service:
+  type: ClusterIP
+  name: http
+  protocol: TCP
+  port: 8080
+  targetPort: http
+
+secret:
+  enabled: false
+
+configMap:
+  enabled: false
+
+replicaCount: 1
+podAnnotations: {}
+
+probes:
+    enabled: true
+    liveness:
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 3
+        successThreshold: 1
+        httpGet:
+            path: /
+            port: http
+    readiness:
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 3
+        successThreshold: 1
+        httpGet:
+          path: /
+          port: http
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 100Mi
+  requests:
+    cpu: 100m
+    memory: 50Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 50
+  targetMemoryUtilizationPercentage: 50
+
+ingress:
+  enabled: false

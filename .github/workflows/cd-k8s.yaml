@@ -1,0 +1,38 @@
+name: Deployment - k8s
+
+on:
+  workflow_dispatch: # manual trigger
+    inputs:
+      build_src:
+        description: "Src version to build. For GitTag: \"tag:[name]\", For GitBranch: \"branch:[name]\", For GitCommit: \"commit:[hash]\", For EcrTag: \"ecr:[tag]\", For PullRequest: \"pr:[number]\""
+        required: false
+        default: 'branch:main'
+  push:
+    branches:
+      - main
+
+permissions:
+  deployments: write
+  id-token: write
+  contents: read
+  actions: read
+  security-events: write
+  packages: write
+
+jobs:
+  build_and_push:
+    uses: "fpmi-hci-2023/project13b-chatgpt/.github/workflows/docker_build_and_publish.yaml@main"
+    with:
+      name: auth
+      build_src: ${{ github.event.inputs.build_src }}
+    secrets:
+      gh_sudo_token: ${{ secrets.GH_SUDO_TOKEN }}
+  deploy:
+    uses: "fpmi-hci-2023/project13b-chatgpt/.github/workflows/k8s_deploy.yaml@main"
+    needs: build_and_push
+    with:
+      serviceName: auth
+    secrets:
+      gh_sudo_token: ${{ secrets.GH_SUDO_TOKEN }}
+      kubernetes_url: ${{ secrets.KUBERNETES_URL }}
+      kubernetes_secret: ${{ secrets.KUBERNETES_SECRET }}
