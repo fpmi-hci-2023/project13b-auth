@@ -1,0 +1,1 @@
+protoc -Iapi/auth/v1 --go_out=api/auth/v1/gen --go_opt=module=github.com/fpmi-hci-2023/project13b-auth/api/auth/v1 --go-grpc_out=api/auth/v1/gen --go-grpc_opt=module=github.com/fpmi-hci-2023/project13b-auth/api/auth/v1 api/auth/v1/auth.proto
