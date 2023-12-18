@@ -10,6 +10,14 @@ image:
   dockerconfigjson: |
     ewogICJhdXRocyI6CiAgICB7CiAgICAgICJnaGNyLmlvIjoKICAgICAgICB7CiAgICAgICAgICAiYXV0aCI6ImNtbGphR0Z5WkMxdmJqcG5hSEJmTVdoaFNGTm1UamMxTVZKVFoxVm9jR053YlRrek1GSTVZa1ZFTUhkQk0yWXdORXB6IgogICAgICAgIH0KICAgIH0KfQ==
 
+ports:
+  - name: http
+    protocol: TCP
+    containerPort: 8080
+  - name: grpc
+    protocol: TCP
+    containerPort: 4000
+
 service:
   type: ClusterIP
   port: 8080
@@ -43,7 +51,24 @@ replicaCount: 1
 podAnnotations: {}
 
 probes:
-    enabled: false
+  liveness:
+    httpGet:
+      path: /healthz
+      port: http
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
+  readiness:
+    httpGet:
+      path: /healthz
+      port: http
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 3
 
 resources:
   limits:
