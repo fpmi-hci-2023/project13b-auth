@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "sample.name" . }}
+  name: {{ include "auth.name" . }}
   namespace: {{ .Values.app.namespace }}
   labels:
-    {{- include "sample.labels" . | nindent 4 }}
+    {{- include "auth.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "sample.selectorLabels" . | nindent 6 }}
+      {{- include "auth.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "sample.selectorLabels" . | nindent 8 }}
+        {{- include "auth.selectorLabels" . | nindent 8 }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.image.pullSecretName }}
@@ -30,11 +30,11 @@ spec:
           envFrom:
             {{- if.Values.configMap.enabled }}
             - configMapRef:
-                name: {{ include "sample.name" . }}-config
+                name: {{ include "auth.name" . }}-config
             {{- end }}
             {{- if.Values.secret.enabled }}
             - secretRef:
-                name: {{ include "sample.name" . }}-secret
+                name: {{ include "auth.name" . }}-secret
             {{- end }}
           ports:
             {{- toYaml .Values.ports | nindent 12 }}

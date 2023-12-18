@@ -10,35 +10,34 @@ image:
   dockerconfigjson: |
     ewogICJhdXRocyI6CiAgICB7CiAgICAgICJnaGNyLmlvIjoKICAgICAgICB7CiAgICAgICAgICAiYXV0aCI6ImNtbGphR0Z5WkMxdmJqcG5hSEJmTVdoaFNGTm1UamMxTVZKVFoxVm9jR053YlRrek1GSTVZa1ZFTUhkQk0yWXdORXB6IgogICAgICAgIH0KICAgIH0KfQ==
 
-ports:
-  - name: http
-    protocol: TCP
-    targetPort: http
-    port: 8080
-    containerPort: 8080
-  - name: grpc
-    protocol: TCP
-    targetPort: grpc
-    port: 4000
-    containerPort: 4000
-
 service:
   type: ClusterIP
+  port: 8080
+  ports:
+    - name: http
+      protocol: TCP
+      targetPort: http
+      port: 8080
+    - name: grpc
+      protocol: TCP
+      targetPort: grpc
+      port: 4000
 
 secret:
   enabled: true
   type: Opaque
   data:
     AES: "4h3tHL510DJjcbHS+7eErUL9Gtb8WnRyyC5ARoYqIJ0="
-    DB_CONN_STRING: "host=localhost port=5432 user=hci password=E8n930d1SdXeOmZMLnQtKeGVegqfNXql05xyLi1I6vSS12KLa3Tiw3DgI2FWTf3m dbname=auth sslmode=disable"
+    DB_CONN_STRING: "host=10.1.0.0 port=5432 user=hci password=E8n930d1SdXeOmZMLnQtKeGVegqfNXql05xyLi1I6vSS12KLa3Tiw3DgI2FWTf3m dbname=auth sslmode=require"
     SECRET: "35ACCE14DB27AE6B6F88BEC45CC41"
 
 configMap:
   enabled: true
   data:
-    HOST: "localhost"
+    HOST: "auth.hci.richardhere.dev"
     TTL_ACCESS: "60"
     TTL_REFRESH: "3600"
+    SECURE_COOKIE: "true"
 
 replicaCount: 1
 podAnnotations: {}
@@ -62,4 +61,26 @@ autoscaling:
   targetMemoryUtilizationPercentage: 50
 
 ingress:
-  enabled: false
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: lets-encrypt
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  className: nginx
+  tls:
+    - hosts:
+        - auth.hci.richardhere.dev
+      secretName: certman-richardhere-hci-auth
+  hosts:
+    - host: auth.hci.richardhere.dev
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: auth
+              port:
+                number: 80
