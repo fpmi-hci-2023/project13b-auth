@@ -61,6 +61,10 @@ func NewApp() Server {
 		),
 	)
 
+	app.Get("/healthz", func(c *fiber.Ctx) error {
+		return c.SendString("auth service healthy")
+	})
+
 	// Registering Swagger API
 	app.Get("/swagger/*", swagger.HandlerDefault)
 

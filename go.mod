@@ -4,6 +4,7 @@ go 1.21
 
 require (
 	github.com/ansrivas/fiberprometheus/v2 v2.6.1
+	github.com/aschenmaker/fiber-health-check v0.1.1
 	github.com/caarlos0/env/v9 v9.0.0
 	github.com/getsentry/sentry-go v0.25.0
 	github.com/gofiber/fiber/v2 v2.51.0

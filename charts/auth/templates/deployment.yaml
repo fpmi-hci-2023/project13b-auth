@@ -37,7 +37,7 @@ spec:
                 name: {{ include "auth.name" . }}-secret
             {{- end }}
           ports:
-            {{- toYaml .Values.ports | nindent 12 }}
+            {{- toYaml .Values.service.ports | nindent 12 }}
           {{- if .Values.probes.enabled }}
           livenessProbe:
             {{- toYaml .Values.probes.liveness | nindent 12 }}
