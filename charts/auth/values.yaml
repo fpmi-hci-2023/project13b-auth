@@ -51,6 +51,7 @@ replicaCount: 1
 podAnnotations: {}
 
 probes:
+  enabled: true
   liveness:
     httpGet:
       path: /healthz
