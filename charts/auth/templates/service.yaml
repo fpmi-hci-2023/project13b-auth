@@ -1,18 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "sample.name" . }}
+  name: {{ include "auth.name" . }}
   namespace: {{ .Values.app.namespace }}
   labels:
-    {{- include "sample.labels" . | nindent 4 }}
+    {{- include "auth.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    {{- range .Values.ports }}
-    - name: {{ .name }}
-      protocol: {{ .protocol }}
-      targetPort: {{ .targetPort }}
-      port: {{ .port }}
-    {{- end }}
+    {{- toYaml .Values.service.ports | nindent 4 }}
   selector:
-    {{- include "sample.selectorLabels" . | nindent 4 }}
+    {{- include "auth.selectorLabels" . | nindent 4 }}
