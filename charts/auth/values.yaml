@@ -13,20 +13,32 @@ image:
 ports:
   - name: http
     protocol: TCP
+    targetPort: http
+    port: 8080
     containerPort: 8080
+  - name: grpc
+    protocol: TCP
+    targetPort: grpc
+    port: 4000
+    containerPort: 4000
 
 service:
   type: ClusterIP
-  name: http
-  protocol: TCP
-  port: 8080
-  targetPort: http
 
 secret:
-  enabled: false
+  enabled: true
+  type: Opaque
+  data:
+    AES: "4h3tHL510DJjcbHS+7eErUL9Gtb8WnRyyC5ARoYqIJ0="
+    DB_CONN_STRING: "host=localhost port=5432 user=hci password=E8n930d1SdXeOmZMLnQtKeGVegqfNXql05xyLi1I6vSS12KLa3Tiw3DgI2FWTf3m dbname=auth sslmode=disable"
+    SECRET: "35ACCE14DB27AE6B6F88BEC45CC41"
 
 configMap:
-  enabled: false
+  enabled: true
+  data:
+    HOST: "localhost"
+    TTL_ACCESS: "60"
+    TTL_REFRESH: "3600"
 
 replicaCount: 1
 podAnnotations: {}
