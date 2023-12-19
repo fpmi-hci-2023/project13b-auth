@@ -22,7 +22,7 @@ RUN apk --update upgrade && \
     update-ca-certificates && \
     rm -rf /var/cache/apk/*
 
-EXPOSE 50320
+EXPOSE 35500
 ENTRYPOINT ["/bin/hci-auth"]
 
 COPY charts /helm-charts

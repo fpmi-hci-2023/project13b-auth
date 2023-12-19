@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"net"
 	"os"
 	"os/signal"
 	"syscall"
@@ -32,7 +33,7 @@ func (s *Server) Run() {
 	cwt, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	conn, err := grpc.DialContext(cwt, ":4000",
+	conn, err := grpc.DialContext(cwt, net.JoinHostPort("", config.GlobalConfig.GRPCPort),
 		grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
 		s.log.Fatal(err, "failed to connect to gRPC")
@@ -50,7 +51,7 @@ func (s *Server) Run() {
 	routes.AuthRouter(v1, authClient)
 
 	go func() {
-		if err = s.app.Listen(":" + config.GlobalConfig.HTTPPort); err != nil {
+		if err = s.app.Listen(net.JoinHostPort("", config.GlobalConfig.GRPCPort)); err != nil {
 			s.log.Fatalf(err, "error while listening at port 80")
 		}
 	}()

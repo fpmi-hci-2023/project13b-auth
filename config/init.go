@@ -19,7 +19,7 @@ var LogInfo struct {
 type Config struct {
 	Host         string `env:"HOST,required"`
 	HTTPPort     string `env:"HTTP_PORT" envDefault:"8080"`
-	GRPCPort     string `env:"GRPC_PORT" envDefault:"4000"`
+	GRPCPort     string `env:"GRPC_PORT" envDefault:"35500"`
 	FiberPrefork bool   `env:"FIBER_PREFORK" envDefault:"false"`
 	DbConnString string `env:"DB_CONN_STRING,required"`
 	TTL          struct {

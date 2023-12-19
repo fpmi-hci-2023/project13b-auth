@@ -29,9 +29,9 @@ func Run() {
 		config.LogInfo.Level,
 		"auth-grpc-setup")
 
-	log.Info("starting gRPC server")
+	log.Infof("starting gRPC server at port %v", config.GlobalConfig.GRPCPort)
 
-	listener, err := net.Listen("tcp", ":4000")
+	listener, err := net.Listen("tcp", net.JoinHostPort("", config.GlobalConfig.GRPCPort))
 	if err != nil {
 		log.Fatalf(err, "error while listening tcp")
 	}
