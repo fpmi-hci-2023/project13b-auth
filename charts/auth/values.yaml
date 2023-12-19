@@ -42,7 +42,7 @@ secret:
 configMap:
   enabled: true
   data:
-    HOST: "auth.hci.richardhere.dev"
+    HOST: "richardhere.dev"
     TTL_ACCESS: "60"
     TTL_REFRESH: "3600"
     SECURE_COOKIE: "true"
