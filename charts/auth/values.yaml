@@ -16,7 +16,7 @@ ports:
     containerPort: 8080
   - name: grpc
     protocol: TCP
-    containerPort: 4000
+    containerPort: 35500
 
 service:
   type: ClusterIP
@@ -29,7 +29,7 @@ service:
     - name: grpc
       protocol: TCP
       targetPort: grpc
-      port: 4000
+      port: 35500
 
 secret:
   enabled: true
