@@ -51,8 +51,8 @@ func (s *Server) Run() {
 	routes.AuthRouter(v1, authClient)
 
 	go func() {
-		if err = s.app.Listen(net.JoinHostPort("", config.GlobalConfig.GRPCPort)); err != nil {
-			s.log.Fatalf(err, "error while listening at port 80")
+		if err = s.app.Listen(net.JoinHostPort("", config.GlobalConfig.HTTPPort)); err != nil {
+			s.log.Fatalf(err, "error while listening at port %v", config.GlobalConfig.HTTPPort)
 		}
 	}()
 
