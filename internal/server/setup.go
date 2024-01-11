@@ -6,6 +6,7 @@ import (
 
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/swagger"
@@ -50,7 +51,7 @@ func NewApp() Server {
 	prometheus.RegisterAt(app, "/metrics")
 
 	app.Use(
-		//cors.New(cors.ConfigDefault),
+		cors.New(cors.ConfigDefault),
 		recover.New(),
 		pprof.New(),
 		prometheus.Middleware,
