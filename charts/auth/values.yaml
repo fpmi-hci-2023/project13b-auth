@@ -95,6 +95,12 @@ ingress:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/affinity: "cookie"
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "Access-Control-Allow-Origin: $http_origin";
+      nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+      nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, 
+      OPTIONS, DELETE, PATCH
+      nginx.ingress.kubernetes.io/enable-cors: "true"
   className: nginx
   tls:
     - hosts:
