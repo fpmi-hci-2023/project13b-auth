@@ -18,7 +18,7 @@ func SetCookie(c *fiber.Ctx, name, value string, ttl int64) {
 		Expires:  time.Now().Add(time.Second * time.Duration(ttl)).UTC(),
 		Secure:   config.GlobalConfig.SecureCookie,
 		HTTPOnly: true,
-		SameSite: "Lax",
+		SameSite: "None",
 	})
 }
 
@@ -32,6 +32,6 @@ func DeleteCookie(c *fiber.Ctx, name string) {
 		Expires:  time.Unix(0, 0).UTC(),
 		Secure:   config.GlobalConfig.SecureCookie,
 		HTTPOnly: true,
-		SameSite: "Lax",
+		SameSite: "None",
 	})
 }
